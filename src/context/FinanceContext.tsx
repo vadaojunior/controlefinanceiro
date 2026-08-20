@@ -48,6 +48,7 @@ interface FinanceContextType {
   deleteCategory: (id: string) => void;
 
   resetToDemoData: () => void;
+  clearAllData: () => void;
 }
 
 const STORAGE_KEYS = {
@@ -137,7 +138,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [transactions]);
 
   // Dynamic Account Balances Computation
-  // Current Balance = initialBalance + Sum(Paid Income in account) - Sum(Paid Expense in account)
   const accountBalances = useMemo(() => {
     const map = new Map<string, number>();
 
@@ -314,7 +314,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const deleteAccount = (id: string) => {
     setAccounts((prev) => prev.filter((acc) => acc.id !== id));
-    // Also cleanup or detach account from transactions if needed
   };
 
   const addMember = (mem: Omit<Member, 'id'>) => {
@@ -357,6 +356,19 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setFilterState(defaultFilterState);
   };
 
+  // Clear all sample data for fresh real usage
+  const clearAllData = () => {
+    setTransactions([]);
+    setMembers([
+      { id: 'mem-1', name: 'Titular', role: 'Titular', color: '#4F46E5' }
+    ]);
+    setAccounts([
+      { id: 'acc-1', name: 'Minha Conta', type: 'Corrente', initialBalance: 0, color: '#003399' }
+    ]);
+    setCategories(initialCategories); // Keep clean standard category choices
+    setFilterState(defaultFilterState);
+  };
+
   return (
     <FinanceContext.Provider
       value={{
@@ -385,6 +397,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         editCategory,
         deleteCategory,
         resetToDemoData,
+        clearAllData,
       }}
     >
       {children}
