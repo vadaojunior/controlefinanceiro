@@ -5,6 +5,7 @@ import {
   Moon,
   Plus,
   RotateCcw,
+  Eraser,
   LayoutDashboard,
   Receipt,
   Building2,
@@ -24,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveTab,
   onOpenTransactionModal,
 }) => {
-  const { darkMode, setDarkMode, resetToDemoData } = useFinance();
+  const { darkMode, setDarkMode, resetToDemoData, clearAllData } = useFinance();
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -76,11 +77,25 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Controls */}
-          <div className="flex items-center space-x-2.5">
+          <div className="flex items-center space-x-2">
+            {/* Clear / Start Fresh Button */}
+            <button
+              onClick={() => {
+                if (window.confirm('Tem certeza que deseja zerar todas as transações de exemplo para começar do zero?')) {
+                  clearAllData();
+                }
+              }}
+              title="Zerar dados de exemplo para começar a usar"
+              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800/50 transition-colors"
+            >
+              <Eraser className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Zerados</span>
+            </button>
+
             {/* Reset Demo Data Button */}
             <button
               onClick={() => {
-                if (window.confirm('Deseja restaurar os dados de demonstração iniciais?')) {
+                if (window.confirm('Deseja recarregar os dados de demonstração iniciais?')) {
                   resetToDemoData();
                 }
               }}
@@ -102,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* New Transaction Button */}
             <button
               onClick={onOpenTransactionModal}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all active:scale-[0.98]"
+              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg transition-all active:scale-[0.98]"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span className="hidden sm:inline">Nova Transação</span>
